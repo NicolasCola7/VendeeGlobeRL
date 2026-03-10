@@ -513,3 +513,177 @@
     line-height: 1;
     margin-top: 2px;
   }
+
+/* ============================================================
+   MOBILE — max-width: 768px
+   Layout: globe top (hero) → stats strip → episode pills bottom
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* Body: allow vertical scroll */
+  body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    height: 48px;
+    padding: 0 16px;
+  }
+
+  .logo { font-size: 18px; letter-spacing: 2px; }
+  .logo-sub { display: none; }
+
+  /* Keep only the first badge (TEST SEASON), hide the PPO one */
+  header > div:last-child .header-badge:last-child { display: none; }
+
+  .header-badge {
+    font-size: 8px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+  }
+
+  /* ---- LAYOUT: single column ---- */
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    padding-top: 48px;
+  }
+
+  /* ---- SIDEBAR → bottom episode drawer ---- */
+  .sidebar {
+    order: 3;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    max-height: none;
+    overflow: visible;
+  }
+
+  .sidebar-header {
+    padding: 12px 16px 10px;
+  }
+
+  .sidebar-title { font-size: 11px; margin-bottom: 6px; }
+
+  /* Probability bar: slightly more compact */
+  .prob-bar { height: 18px; }
+  .prob-seg { font-size: 10px; }
+  .prob-legend { font-size: 8px; gap: 8px; }
+
+  /* Episode list: horizontal scrolling row instead of vertical */
+  .episode-list {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 12px 12px;
+    gap: 8px;
+    scrollbar-width: thin;
+  }
+
+  .episode-list::-webkit-scrollbar { height: 3px; }
+
+  .episode-card {
+    flex: 0 0 200px;       /* fixed width cards in the row */
+    margin-bottom: 0;
+    padding: 10px 12px;
+  }
+
+  .ep-meta { font-size: 8px; gap: 3px; }
+  .ep-waypoint-bar { margin-top: 8px; }
+  .wp-dot { width: 7px; height: 7px; }
+
+  /* ---- MAIN ---- */
+  .main {
+    order: 1;
+    height: auto;
+  }
+
+  /* Globe: hero, fills most of the viewport */
+  .globe-container {
+    height: 56vw;          /* square-ish on landscape, tall on portrait */
+    min-height: 320px;
+    max-height: 460px;
+  }
+
+  /* Title overlay: smaller */
+  .ep-title-label { font-size: 24px; letter-spacing: 3px; }
+  .ep-title-sub   { font-size: 8px;  letter-spacing: 1.5px; }
+  .ep-title-overlay { top: 10px; left: 14px; }
+
+  /* Season badge: smaller, move to avoid overlap */
+  .season-badge {
+    top: 10px; right: 12px;
+    padding: 5px 10px;
+    font-size: 8px;
+  }
+  .season-badge span { font-size: 13px; }
+
+  /* ---- STATS PANEL → compact 2-row grid ---- */
+  .stats-panel {
+    order: 2;
+    height: auto;
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-block {
+    padding: 10px 8px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Remove bottom border from last row */
+  .stat-block:nth-child(4),
+  .stat-block:nth-child(5),
+  .stat-block:nth-child(6) { border-bottom: none; }
+
+  /* Remove right border from every 3rd */
+  .stat-block:nth-child(3),
+  .stat-block:nth-child(6) { border-right: none; }
+
+  .stat-value { font-size: 22px; }
+  .stat-label { font-size: 8px; letter-spacing: 1px; margin-bottom: 3px; }
+  .stat-unit  { font-size: 8px; }
+
+  .gate-indicators { gap: 4px; flex-wrap: wrap; }
+  .gate-chip { font-size: 7px; padding: 2px 4px; }
+}
+
+/* ---- Extra small phones (< 420px) ---- */
+@media (max-width: 420px) {
+
+  .logo { font-size: 15px; }
+
+  .globe-container {
+    height: 72vw;
+    min-height: 260px;
+    max-height: 380px;
+  }
+
+  .ep-title-label { font-size: 20px; }
+
+  .stats-panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Rebalance borders for 2-col grid */
+  .stat-block { border-bottom: 1px solid var(--border); }
+  .stat-block:nth-child(3) { border-right: 1px solid var(--border); }
+  .stat-block:nth-child(5),
+  .stat-block:nth-child(6) { border-bottom: none; }
+  .stat-block:nth-child(2),
+  .stat-block:nth-child(4),
+  .stat-block:nth-child(6) { border-right: none; }
+
+  .episode-card { flex: 0 0 170px; }
+}
