@@ -4,14 +4,14 @@
 // ============================================================
 
 const WAYPOINTS = [
-  { lon: -1.783,    lat: 46.497,  label: 'Start (Les Sables)',  color: '#b0ff00' },
-  { lon: -29.0,     lat: 10.0,    label: 'WP1 Mid-Atlantic',    color: '#00e5ff' },
-  { lon: 18.0,      lat: -42.0,   label: 'WP2 Good Hope',       color: '#00e5ff' },
-  { lon: 115.0,     lat: -48.0,   label: 'WP3 Leeuwin',         color: '#00e5ff' },
-  { lon: -123.39,   lat: -48.88,  label: 'WP4 Pacific',         color: '#00e5ff' },
-  { lon: -67.0,     lat: -56.0,   label: 'WP5 Cape Horn',       color: '#00e5ff' },
-  { lon: -29.0,     lat: 10.0,    label: 'WP6 Return Atlantic', color: '#00e5ff' },
-  { lon: -3.0,      lat: 46.0,    label: 'WP7 Finish',          color: '#ffd54f' },
+  { lon: -1.783, lat: 46.497, label: 'Start (Les Sables)', color: '#b0ff00' },
+  { lon: -29.0, lat: 10.0, label: 'WP1 Mid-Atlantic', color: '#00e5ff' },
+  { lon: 18.0, lat: -42.0, label: 'WP2 Good Hope', color: '#00e5ff' },
+  { lon: 115.0, lat: -48.0, label: 'WP3 Leeuwin', color: '#00e5ff' },
+  { lon: -123.39, lat: -48.88, label: 'WP4 Pacific', color: '#00e5ff' },
+  { lon: -67.0, lat: -56.0, label: 'WP5 Cape Horn', color: '#00e5ff' },
+  { lon: -29.0, lat: 10.0, label: 'WP6 Return Atlantic', color: '#00e5ff' },
+  { lon: -3.0, lat: 46.0, label: 'WP7 Finish', color: '#ffd54f' },
 ];
 
 const ICE_LIMIT = -60.0;
@@ -24,16 +24,16 @@ function gcInterp(lon1, lat1, lon2, lat2, n) {
   const φ1 = lat1 * toRad, λ1 = lon1 * toRad;
   const φ2 = lat2 * toRad, λ2 = lon2 * toRad;
   const dφ = φ2 - φ1, dλ = λ2 - λ1;
-  const a = Math.sin(dφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(dλ/2)**2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a = Math.sin(dφ / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(dλ / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   for (let i = 0; i <= n; i++) {
     const f = i / n;
-    const A = Math.sin((1-f)*c) / Math.sin(c) || (1-f);
-    const B = Math.sin(f*c) / Math.sin(c) || f;
-    const x = A*Math.cos(φ1)*Math.cos(λ1) + B*Math.cos(φ2)*Math.cos(λ2);
-    const y = A*Math.cos(φ1)*Math.sin(λ1) + B*Math.cos(φ2)*Math.sin(λ2);
-    const z = A*Math.sin(φ1)             + B*Math.sin(φ2);
-    pts.push({ lat: Math.atan2(z, Math.sqrt(x*x+y*y))*toDeg, lon: Math.atan2(y,x)*toDeg });
+    const A = Math.sin((1 - f) * c) / Math.sin(c) || (1 - f);
+    const B = Math.sin(f * c) / Math.sin(c) || f;
+    const x = A * Math.cos(φ1) * Math.cos(λ1) + B * Math.cos(φ2) * Math.cos(λ2);
+    const y = A * Math.cos(φ1) * Math.sin(λ1) + B * Math.cos(φ2) * Math.sin(λ2);
+    const z = A * Math.sin(φ1) + B * Math.sin(φ2);
+    pts.push({ lat: Math.atan2(z, Math.sqrt(x * x + y * y)) * toDeg, lon: Math.atan2(y, x) * toDeg });
   }
   return pts;
 }
@@ -50,7 +50,7 @@ function noisyPath(pts, amp, freq) {
 function buildRoute(wpIndices, noise = 0.6, freq = 0.18) {
   let lats = [], lons = [];
   for (let i = 0; i < wpIndices.length - 1; i++) {
-    const a = WAYPOINTS[wpIndices[i]], b = WAYPOINTS[wpIndices[i+1]];
+    const a = WAYPOINTS[wpIndices[i]], b = WAYPOINTS[wpIndices[i + 1]];
     const pts = noisyPath(gcInterp(a.lon, a.lat, b.lon, b.lat, 60), noise, freq);
     if (i > 0) pts.shift();
     pts.forEach(p => { lats.push(p.lat); lons.push(p.lon); });
@@ -63,7 +63,7 @@ function buildRoute(wpIndices, noise = 0.6, freq = 0.18) {
 // For DNF episodes: route stops partway
 
 const EPISODES = [
-   {
+  {
     id: 0,
     label: "finish85",
     prob: 80,
@@ -134,9 +134,9 @@ EPISODES.forEach(ep => {
 
   card.innerHTML = `
     <div class="ep-header">
-      <span class="ep-num">EP ${String(ep.id).padStart(2,'0')}</span>
+      <span class="ep-num">EP ${ep.id + 1}</span>
       <div style="display:flex;gap:5px;align-items:center">
-        <span style="font-family:'Bebas Neue',cursive;font-size:13px;letter-spacing:1px;color:${isFinish ? 'var(--accent-lime)' : ep.id===1 ? 'var(--accent-red)' : 'var(--accent-gold)'}">
+        <span style="font-family:'Bebas Neue',cursive;font-size:13px;letter-spacing:1px;color:${isFinish ? 'var(--accent-lime)' : ep.id === 1 ? 'var(--accent-red)' : 'var(--accent-gold)'}">
           ${ep.prob}%
         </span>
         <span class="ep-status ${isFinish ? 'status-finish' : 'status-dnf'}">
@@ -147,7 +147,7 @@ EPISODES.forEach(ep => {
     <div class="ep-meta">
       <span>${ep.days.toFixed(1)} days</span>
       <span>${ep.avgSpeed.toFixed(1)} kt avg</span>
-      <span>${(ep.dist/1000).toFixed(1)}k nm</span>
+      <span>${(ep.dist / 1000).toFixed(1)}k nm</span>
       <span>${ep.wpIdx}/7 WP</span>
     </div>
     ${wpdots}
@@ -176,11 +176,11 @@ function loadEpisode(id) {
   loader.classList.remove('hidden');
 
   // Title
-  document.getElementById('ep-title').textContent = `EPISODE ${String(id).padStart(2,'0')}`;
+  document.getElementById('ep-title').textContent = `EPISODE ${id + 1}`;
   const isFinish = ep.outcome === 'FINISH';
   document.getElementById('ep-subtitle').textContent =
     isFinish ? `✓ RACE COMPLETED IN ${ep.days.toFixed(1)} DAYS  ·  PROBABILITY ${ep.prob}%`
-             : `✕ DNF — ${ep.outcomeNote || 'DID NOT FINISH'}  ·  PROBABILITY ${ep.prob}%`;
+      : `✕ DNF — ${ep.outcomeNote || 'DID NOT FINISH'}  ·  PROBABILITY ${ep.prob}%`;
 
   // Stats bar
   document.getElementById('stat-days').textContent = ep.days.toFixed(1);
@@ -234,7 +234,7 @@ function loadEpisode(id) {
     lat: WAYPOINTS.slice(1, 8).map(w => w.lat),
     mode: 'markers+text',
     marker: { size: 7, color: '#ff4444', opacity: 0.6 },
-    text: ['WP1','WP2','WP3','WP4','WP5','WP6','WP7'],
+    text: ['WP1', 'WP2', 'WP3', 'WP4', 'WP5', 'WP6', 'WP7'],
     textposition: 'top center',
     textfont: { color: 'rgba(255,100,100,0.7)', size: 9 },
     name: 'Waypoints',
@@ -269,7 +269,7 @@ function loadEpisode(id) {
   // End marker
   traces.push({
     type: 'scattergeo',
-    lon: [lons[lons.length-1]], lat: [lats[lats.length-1]],
+    lon: [lons[lons.length - 1]], lat: [lats[lats.length - 1]],
     mode: 'markers',
     marker: {
       size: 12,
@@ -281,7 +281,7 @@ function loadEpisode(id) {
   });
 
   // Ice exclusion zone
-  const iceLons = Array.from({length: 37}, (_, i) => -180 + i*10);
+  const iceLons = Array.from({ length: 37 }, (_, i) => -180 + i * 10);
   const iceLats = Array(37).fill(ICE_LIMIT);
   traces.push({
     type: 'scattergeo',
@@ -309,10 +309,10 @@ function loadEpisode(id) {
     },
     geo: {
       projection: { type: 'orthographic', rotation: { lon: -20, lat: -20 } },
-      showland: true,       landcolor: 'rgb(35,35,40)',
-      showocean: true,      oceancolor: 'rgb(8,30,70)',
+      showland: true, landcolor: 'rgb(35,35,40)',
+      showocean: true, oceancolor: 'rgb(8,30,70)',
       showcoastlines: true, coastlinecolor: 'rgb(80,100,120)',
-      showcountries: true,  countrycolor: 'rgba(80,100,120,0.4)',
+      showcountries: true, countrycolor: 'rgba(80,100,120,0.4)',
       showframe: false,
       bgcolor: '#040d1a',
     }
