@@ -48,8 +48,4 @@ The best finishing time observed was **84.5 days** at an average speed of **12.4
 |---|---|
 | RL framework | Stable-Baselines3 (PPO) |
 | Environment | Custom Gymnasium env (`VendeeGlobeEnv`) |
-| Wind data | ERA5 reanalysis via Copernicus CDS (`cdsapi`, `cfgrib`) |
-| Visualization | Plotly.js (orthographic Scattergeo globe) |
-| Language | Python 3.11, JavaScript (vanilla) |
-| IDE | Google Antigravity (VS Code fork) |
-| Python environment | `venv311` with `ipykernel` Jupyter kernel |
+| Wind data | ERA5 reanalysis via Copernicus CDS (`cfgrib`) |
